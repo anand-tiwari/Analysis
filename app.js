@@ -44,6 +44,8 @@ function firstController ($scope, $rootScope, $http, $filter, $mdDialog) {
 //  $scope.match = [];
     $scope.firstInning = [];
     $scope.secondInning = [];
+    $scope.bothInning = [];
+    
     
     $scope.analysis = function(){
         console.log($scope.firstInningWin,"anand");
@@ -128,19 +130,27 @@ function firstController ($scope, $rootScope, $http, $filter, $mdDialog) {
     }
     
     $scope.yearWiseTotal = [];
-    $scope.yearTotalScore = function(year,run){
-        var found = false;
+    $scope.firstInningRuns;
+    $scope.secondInningRuns;
+    $scope.firstInningMatch;
+    $scope.secondInningMatch;
+    
+    $scope.yearTotalScore = function(year,run,inning){
+        var found = false,
+            out=true;
 //        console.log(year, run);
 //        run = run.replace(/\*$/, '');
         run = String(run);
         if (run.charAt(run.length - 1) == '*') {
+            out = false;
             run = run.substr(0, run.length - 1);
         }
         var isANumber = isNaN(run) === false;
         for(var i =0;i<$scope.yearWiseTotal.length;i++){
-            if($scope.yearWiseTotal[i].year ==year){
+//            console.log($scope.yearWiseTotal[i], year,"inside function");
+            if($scope.yearWiseTotal[i].label ==year){
                 if (isANumber){
-                    $scope.yearWiseTotal[i].score = $scope.yearWiseTotal[i].score + parseInt(run);
+                    $scope.yearWiseTotal[i].value = $scope.yearWiseTotal[i].value + parseInt(run)*1000;
                 }
                 found = true;
                 break;
@@ -149,70 +159,54 @@ function firstController ($scope, $rootScope, $http, $filter, $mdDialog) {
         if(!found && isANumber){
             $scope.yearWiseTotal.push({
                "label":year,
-                "value":parseInt(run)
+                "value":parseInt(run)*1000
             });
+            
+        }
+        
+        if(inning=="1st" && isANumber){
+            $scope.firstInningRuns = ($scope.firstInningRuns|0) + parseInt(run);
+            if(out){
+            $scope.firstInningMatch = ($scope.firstInningMatch|0)+1;
+            }
+        }
+        else if(inning=="2nd" && isANumber){
+            $scope.secondInningRuns = ($scope.secondInningRuns|0)+ parseInt(run);
+            if(out){
+            $scope.secondInningMatch = ($scope.secondInningMatch|0)+1;
+            }
         }
     }
 
     
-    function piechart1(){
-        FusionCharts.ready(function () {
-        var revenueChart = new FusionCharts({
-            type: 'doughnut3d',
-            renderAt: 'chart-container',
-            width: '450',
-            height: '300',
-            dataFormat: 'json',
-            dataSource: {
-                "chart": {
-                    "caption": "Split of Revenue by Product Categories",
-                    "subCaption": "Last year",
-                    "numberPrefix": "$",
-                    "paletteColors": "#0075c2,#1aaf5d,#f2c500,#f45b00,#8e0000",
-                    "bgColor": "#ffffff",
-                    "showBorder": "0",
-                    "use3DLighting": "0",
-                    "showShadow": "0",
-                    "enableSmartLabels": "0",
-                    "startingAngle": "310",
-                    "showLabels": "0",
-                    "showPercentValues": "1",
-                    "showLegend": "1",
-                    "legendShadow": "0",
-                    "legendBorderAlpha": "0",                                
-                    "decimals": "0",
-                    "captionFontSize": "14",
-                    "subcaptionFontSize": "14",
-                    "subcaptionFontBold": "0",
-                    "toolTipColor": "#ffffff",
-                    "toolTipBorderThickness": "0",
-                    "toolTipBgColor": "#000000",
-                    "toolTipBgAlpha": "80",
-                    "toolTipBorderRadius": "2",
-                    "toolTipPadding": "5",
-                },
-                "data":[
-                    {
-                        "label": "Food",
-                        "value": "28504"
-                    }, 
-                    {
-                        "label": "Apparels",
-                        "value": "14633"
-                    }, 
-                    {
-                        "label": "Electronics",
-                        "value": "10507"
-                    }, 
-                    {
-                        "label": "Household",
-                        "value": "4910"
-                    }
-                ]
-            }
-        }).render();
+function piechart1(){
+    console.log($scope.yearWiseTotal, "piechart function");
+    $scope.firstInningAvg = $scope.firstInningRuns/$scope.firstInningMatch;
+    $scope.secondInningAvg = $scope.secondInningRuns/$scope.secondInningMatch;
+    $scope.allInningAvg = ($scope.firstInningAvg+$scope.secondInningAvg)/2;
+    console.log($scope.firstInningAvg, $scope.secondInningAvg, $scope.allInningAvg);
+   FusionCharts.ready(function () {
+    var revenueChart = new FusionCharts({
+        type: 'area2d',
+        id: "myChart",
+        renderAt: 'chart-container',
+        width: '500',
+//        height: '250',
+        dataFormat: 'json',
+        dataSource: {
+            "chart": {
+                "caption": "year wise run graph",
+                "xAxisName": "years",
+                "yAxisName": "total Run",
+                 "usePlotGradientColor": "0",
+                "theme" : "fint"
+            },
+            "data": $scope.yearWiseTotal
+        }
     });
-    
+    revenueChart.render();
+});
+        
 }
     
     
@@ -222,7 +216,7 @@ function firstController ($scope, $rootScope, $http, $filter, $mdDialog) {
     angular.forEach(response.data, function(value, key) {
             
             var year = new Date(value['date']).getFullYear();
-            $scope.yearTotalScore(year,value['batting_score']);
+            $scope.yearTotalScore(year,value['batting_score'],value['batting_innings']);
             
             if(value['batting_innings']=="1st"){
                 if(value['match_result'] == "won"){
@@ -250,12 +244,17 @@ function firstController ($scope, $rootScope, $http, $filter, $mdDialog) {
                 $scope.secondInningScore = $scope.scoreRange(value['batting_score'],$scope.secondInningScore);
                 $scope.secondInning = $scope.checkMatchResult(value['match_result'],value['opposition'],$scope.secondInning);
             }
+            
+            $scope.bothInning = $scope.checkMatchResult(value['match_result'],value['opposition'],$scope.bothInning);
     });
     
+    console.log($scope.bothInning,"both inning win loss data");
     var array = $scope.dataFormat($scope.firstInning);
+    console.log(array,"+++++++++++");
     $scope.xyz("firstInning", array[0], array[1], array[2]);  
     
     array = $scope.dataFormat($scope.secondInning);
+    console.log(array,"++++++++");
     $scope.xyz("secondInning", array[0], array[1], array[2]);
     $scope.analysis();
     
@@ -288,8 +287,62 @@ function firstController ($scope, $rootScope, $http, $filter, $mdDialog) {
     $scope.xyz("batting_score", category, score1,score2);
     console.log($scope.yearWiseTotal,"year wise score");
     piechart1();
-        
+    
+    printChart();
+    
     });
+    
+    function printChart(){
+        
+    var array = [];
+        angular.forEach($scope.bothInning,function(value,key){
+//            console.log(key,value,"cheking ");
+            var percentage = (parseInt(value.win)*100)/(parseInt(value.win)+parseInt(value.lost));
+            percentage = percentage.toFixed(2);
+            var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            
+            array.push({
+            "label":value.team,
+            "value":percentage,
+            "color":randomColor
+            })
+        })
+        console.log(array,"pppppppppppppppp");
+        
+        FusionCharts.ready(function(){
+    var fusioncharts = new FusionCharts({
+    type: 'column2d',
+    renderAt: 'winning-percentage',
+    width: '450',
+    height: '300',
+    dataFormat: 'json',
+    dataSource: {
+        "chart": {
+            "theme": "fint",
+            "caption": "winning percentage ",
+            "xaxisname": "teams",
+            "yaxisname": "percentage",
+            "numberSuffix": "%",
+            "yAxisMaxValue": "100",
+            "yAxisMinValue": "0",
+            "formatNumberScale": "0",
+            "rotateValues": "1",
+            "placeValuesInside": "0",
+            "valueFontColor": "#FFFFFF",
+            "valueBgColor": "#000000",
+            "valueBgAlpha": "50",
+            //Customizing thousand separator position
+            //(first block of 3 digits from right, and then in blocks of 2)
+            "thousandSeparatorPosition": "2,3"
+        },
+        "data": array
+    }
+}
+);
+    fusioncharts.render();
+});
+
+}
     
     $scope.xyz = function(id, category, win, lost){ 
 //        $scope.analysis();
