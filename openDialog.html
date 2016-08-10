@@ -1,0 +1,38 @@
+
+<md-dialog aria-label="Photos" style="width:100%;border:2px solid brown;">
+    <md-content layout-fill >
+        <div layout="row">
+            <div flex="50" layout="column" style="margin:10px;">
+                <img ng-src={{selectedImage}} /><br>
+                <span>EDIT Description</span><br>
+                <textarea id="text" cols="40" rows="5" my-maxlength="500" ng-model="textareaText" placeholder="can any one tell me ..."></textarea>
+            </div>
+            <div flex="50" layout="column">
+                <span style="padding:10px;">ADD TO..</span><br>
+        
+                <md-input-container class="md-block">
+                  <label>Product Name</label>
+                  <input ng-model="productName">
+                 </md-input-container>
+
+                <button style="padding:20px;">creating new frame</button><br>
+
+                <div flex="100" layout="row" ng-repeat="item in allData "> 
+                    <div flex="80" layout="row" style="position: relative;top: 0px;">
+                            <div flex="45">
+                                     <img ng-src="{{item.FrameData.cover_thumb}}" /> 
+                            </div>
+                           <div flex="50" layout="column">
+                            <img  style="height:26%;" ng-src="{{item.FrameData.cover_thumb}}" />
+                            <img  style="height:26%;" ng-src="{{item.FrameData.cover_thumb}}" />
+                        </div>
+                    </div>
+                    <div flex="20">
+                        {{item.FrameData.frameName}}
+                    </div> 
+                </div>
+            
+            </div>
+        </div>
+    </md-content>
+</md-dialog>
