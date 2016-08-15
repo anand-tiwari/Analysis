@@ -2,110 +2,46 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>My test page</title>
+        <title>Sachin Tendulkar Records Analysis</title>
         <link rel="stylesheet" href="./libs/angular-material.min.css">
         <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="libs/bootstrap.min.css">
-        <script src="./libs/jquery.min.js"></script>
         <script src="./libs/angular.min.js"></script>
         <script src="./libs/angular-animate.min.js"></script>
         <script src="./libs/angular-aria.min.js"></script>
         <script src="./libs/angular-material.min.js"></script>
-        <script src="./libs/bootstrap.min.js"></script>
-<!--        <script type="text/javascript" src="/assets/script/jquery.canvasjs.min.js"></script>-->
-<!--        <script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>-->
         <script src="http://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
         <script src="http://static.fusioncharts.com/code/latest/fusioncharts.charts.js"></script>
         <script src="http://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fint.js"></script>
-        <script src="libs/chart.js"></script>
-        <script src="libs/fusionchart.js"></script>
+        <script src="./libs/chart.js"></script>
+        <script src="./libs/fusionchart.js"></script>
         <script src="app.js"></script>
-        
     </head>
-    <body layout="row" ng-app="myApp" ng-controller="firstController" ng-cloak>
-    <div layout="column" flex="100">
-        <div style="font-size: 25px;font-weight: 700;">On the Basis of match Result</div>
-        <div layout="row" flex="100">
-            <div flex="50" id="firstInning"></div>
-            <div flex="50" id="secondInning"></div>
-        </div>
-        <br/><br>
-        <div>
-            <table style="width:100%">
-                <thead>
-                    <th colspan="2">1st Inning</th>
-                    <th colspan="2">2nd Inning</th>
-                    <th colspan="2">Over-all</th>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>WIN</td>
-                        <td>LOST</td>
-                        <td>WIN</td>
-                        <td>LOST</td>
-                        <td>WIN</td>
-                        <td>LOST</td>
-                    </tr>
-                    <tr>
-                        <td>{{firstInningWin}}</td>
-                        <td>{{firstInningLost}}</td>
-                        <td>{{secondInningWin}}</td>
-                        <td>{{secondInningLost}}</td>
-                        <td>{{firstInningWin+secondInningWin}}</td>
-                        <td>{{firstInningLost+secondInningLost}}</td>
-                    </tr>
-                    
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <br><br/>
-    <div layout="column" flex="100">
-        <br>
-        <div id="batting_score"></div>
-         <br/><br>
-        <div>
-            <table style="width:100%">
-                <thead>
-                    <th colspan="6">1st Inning</th>
-                    <th colspan="6">2nd Inning</th>
-<!--                    <th colspan="6">Over-all</th>-->
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>0 to 49</td>
-                        <td>50 to 99</td>
-                        <td>100 to 149</td>
-                        <td>150 to 199</td>
-                        <td>200 to 249</td>
-                        <td>250 to 300</td>
-                    </tr>
-                    <tr>
-                        <td>{{firstInningScore["0_to_49"]}}</td>
-                        <td>{{firstInningScore["50_to_99"]}}</td>
-                        <td>{{firstInningScore["100_to_149"]}}</td>
-                        <td>{{firstInningScore["150_to_199"]}}</td>
-                        <td>{{firstInningScore["200_to_249"]}}</td>
-                        <td>{{firstInningScore["250_to_299"]}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{secondInningScore["0_to_49"]}}</td>
-                        <td>{{secondInningScore["50_to_99"]}}</td>
-                        <td>{{secondInningScore["100_to_149"]}}</td>
-                        <td>{{secondInningScore["150_to_199"]}}</td>
-                        <td>{{secondInningScore["200_to_249"]}}</td>
-                        <td>{{secondInningScore["250_to_299"]}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div layout="row">
-        <div id="chart-container">FusionCharts will render here</div>
-    </div>
-    <div layout="row">
-        <div id="winning-percentage">FusionCharts will render here</div>
-    </div>
+    <body ng-app="myApp" ng-controller="firstController" ng-cloak ng-init="initialize()">
+        <h3>Click on Any one of them to see the Result:- </h3>
+    <ul style="margin-top:50px;">
+            <li ng-click="groundLostWon()">Ground won /lost Results </li>
         
+            <li ng-click="WinInIndiaOrForeign()">Matches Winning Percentage in India or Foregin</li>
+
+            <li ng-click="scoreWithWin()">Score in range and winning percentage</li>
+
+            <li ng-click="wicketsDrawChart()">wickets Ticken by Sachin Tendular and Winning Percentage</li>
+
+            <li ng-click="catchDrawChart()">Catch Taken BY sachin And Winning Percentage</li>
+
+            <li ng-click="winPercentageAgainstOposstion()">Winning Percentage  Against different opposition</li>
+
+            <li ng-click="runAndCountAgainstOpposition()">Number of times Run Scored Against oppotion</li>
+
+            <li ng-click="battingAverageFunction()">Batting Average Against Opposition</li>
+
+            <li ng-click="averageRunAtGround()">Batting Average On Different Grounds</li>
+
+            <li ng-click="yearWiseRuns()">Total Numbers of run scored in each year Graph</li>
+
+            <li ng-click="winLostPercentagrWithScoreRange()">Run Scored and on the scored run winning Percentage</li>
+
+            <li ng-click="inningWonLost()">Innings Win Lost No Of Matches</li>
+    </ul>
     </body>
 </html>

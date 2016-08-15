@@ -1,0 +1,49 @@
+<md-dialog aria-label="Photos" style="width:100%;min-height:80%;">  
+     <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Analysis Graph <br>{{heading}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon style="color:red;font-size: 18px;">&#10006;</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    
+    <md-content layout-fill >  
+        <div layout="column">
+            <label>Select inning/ground:</label>
+            <select style="width:60%;margin-left:10px;" ng-init="onGroundBattingInning = Innings[0]" ng-model="onGroundBattingInning" ng-options="option.name for option in Innings" ng-change="InningChange()"></select>
+            <br>
+            <div id="groundChart"></div>
+        </div>
+        <br>
+        <table style="width:80%">
+                <thead>
+                    <th>Grounds In</th>
+                    <th>Hundred</th>
+                    <th>Runs</th>
+                    <th>Match</th>
+                    <th>Won</th>
+                    <th>Average</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Indian</td>
+                        <td>{{inIndiaHundred}}</td>
+                        <td>{{inIndiaRun}}</td>
+                        <td>{{inIndiaMatch}}</td>
+                        <td>{{inIndiaWon}}</td>
+                        <td>{{inIndiaRun/inIndiaMatch}}</td>
+                    </tr>
+                    <tr>
+                       <td>OutOfIndia</td>
+                        <td>{{outOfIndiaHundred}}</td>
+                        <td>{{outOfIndiaRun}}</td>
+                        <td>{{outOfIndiaMatch}}</td>
+                        <td>{{outOfIndiaWon}}</td>
+                        <td>{{outOfIndiaRun/outOfIndiaMatch}}</td>
+                    </tr>
+            </tbody>
+        </table>
+    </md-content>
+</md-dialog>

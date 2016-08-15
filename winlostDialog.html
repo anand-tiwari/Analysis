@@ -1,0 +1,50 @@
+<md-dialog aria-label="Photos" style="width:100%;min-height:80%;">  
+     <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Analysis Graph <br> {{heading}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon style="color:red;font-size: 18px;">&#10006;</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-content layout-fill>  
+        <div layout="column" flex="100">    
+            <label>Select Inning :</label>
+            <select style="width:60%;margin-left:10px;"  ng-init="wonLostInInning = selectingOptions[0]" ng-model="wonLostInInning" ng-options="option.name for option in selectingOptions" ng-change="selectInning()"></select>
+            <br>
+            <div id="inningId"></div>
+        </div>
+        <div layout="column">
+        <div style="font-size: 15px;font-weight: 700;">On the Basis of match Result</div>
+        <div>
+            <table style="width:80%">
+                <thead>
+                    <th colspan="2">1st Inning</th>
+                    <th colspan="2">2nd Inning</th>
+                    <th colspan="2">Over-all</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>WIN</td>
+                        <td>LOST</td>
+                        <td>WIN</td>
+                        <td>LOST</td>
+                        <td>WIN</td>
+                        <td>LOST</td>
+                    </tr>
+                    <tr>
+                        <td>{{firstInningWin}}</td>
+                        <td>{{firstInningLost}}</td>
+                        <td>{{secondInningWin}}</td>
+                        <td>{{secondInningLost}}</td>
+                        <td>{{firstInningWin+secondInningWin}}</td>
+                        <td>{{firstInningLost+secondInningLost}}</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </md-content>
+</md-dialog>

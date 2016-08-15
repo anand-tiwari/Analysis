@@ -1,0 +1,19 @@
+<md-dialog aria-label="Photos" style="width:100%;min-height:80%;">  
+     <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Analysis Graph <br>{{heading}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon style="color:red;font-size: 18px;">&#10006;</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-content layout-fill >  
+        <div layout="column">
+            <label>Select Range of Score :</label>
+            <select style="width:60%;margin-left:10px;"  ng-init="runAgainstOppostion = options[0]" ng-model="runAgainstOppostion" ng-options="option.name for option in options" ng-change="selectOtherRange()"></select>
+            <br>
+            <div id="runId"></div>
+        </div>
+    </md-content>
+</md-dialog>
