@@ -1097,7 +1097,7 @@ function printChart(id,array, p,type){
             dataFormat: 'json',
             dataSource: {
                 "chart": {
-                    "theme": "fint,zune,ocean",
+                    "theme": "fint",
                     "subCaption": "winning percentage ",
                     "xaxisname": "teams",
                     "yaxisname": "percentage",
